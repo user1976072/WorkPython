@@ -169,15 +169,47 @@ for data in d:
         s.add(value.strip())
 print(s)
 """
-#Дан массив, состоящий из целых чисел. Напишите программу, которая подсчитает количество элементов массива, больших предыдущего (элемента с предыдущим номером) 
+#Дан массив, состоящий из целых чисел. Напишите программу, которая подсчитает количество 
+# элементов массива, больших предыдущего (элемента с предыдущим номером) 
 
 #Input: [0, -1, 5, 2, 3]
 
 #Output: 2 (-1 < 5, 2 < 3)
-
+"""
 data = [int(i) for i in input ("Введите числа: ").split()]
 k = 0
 for i in range(1,len(data)):
     if data[i] > data[i-1]:
         k += 1
 print(k)
+"""
+# Напишите программу, которая принимает на вход строку, и отслеживает, сколько раз каждый символ уже встречался. Количество повторов добавляется к символам с помощью постфикса формата _n.
+
+# Input: a a a b c a a d c d d
+# Output: a a_1 a_2 b c a_3 a_4 d c_1 d_1 d_2
+sp = input("enter symbols: ").split()
+d ={}
+for letter in sp:
+    if letter not in d:
+        count = 0
+        d[letter] = count
+        print(letter, end = ' ')
+        
+    else:
+        d[letter] +=1
+        print("{}_{}" .format(letter, d[letter]), end=" ")
+# Пользователь вводит текст(строка). Словом считается последовательность непробельных символов идущих подряд, слова разделены одним или большим числом пробелов. Определите, сколько различных слов содержится в этом тексте.
+# Input: She sells sea shells on the sea shore The shells that she sells are sea shells I'm sure.So if she sells sea shells on the sea shore I'm sure that the shells are sea shore shells
+
+# Output: 13
+# string = ''' She sells sea shells on the sea shore The shells that she sells are sea shells I'm sure.So if she sells sea shells on the sea shore I'm sure that the shells are sea shore shells'''.lower().replace("."," ")
+# spl = string.split()
+# f = set(spl)
+# print(f)
+# print(len(f))
+
+
+# listq = [7, 15, 5, 63, 89]
+# listq.sort()
+# #list2 = sorted(listq, reverse = True)
+# print(listq)
