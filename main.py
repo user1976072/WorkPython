@@ -187,17 +187,17 @@ print(k)
 
 # Input: a a a b c a a d c d d
 # Output: a a_1 a_2 b c a_3 a_4 d c_1 d_1 d_2
-sp = input("enter symbols: ").split()
-d ={}
-for letter in sp:
-    if letter not in d:
-        count = 0
-        d[letter] = count
-        print(letter, end = ' ')
+# sp = input("enter symbols: ").split()
+# d ={}
+# for letter in sp:
+#     if letter not in d:
+#         count = 0
+#         d[letter] = count
+#         print(letter, end = ' ')
         
-    else:
-        d[letter] +=1
-        print("{}_{}" .format(letter, d[letter]), end=" ")
+#     else:
+#         d[letter] +=1
+#         print("{}_{}" .format(letter, d[letter]), end=" ")
 # Пользователь вводит текст(строка). Словом считается последовательность непробельных символов идущих подряд, слова разделены одним или большим числом пробелов. Определите, сколько различных слов содержится в этом тексте.
 # Input: She sells sea shells on the sea shore The shells that she sells are sea shells I'm sure.So if she sells sea shells on the sea shore I'm sure that the shells are sea shore shells
 
@@ -213,3 +213,62 @@ for letter in sp:
 # listq.sort()
 # #list2 = sorted(listq, reverse = True)
 # print(listq)
+
+# рекурсия фибоначи
+def fib(n):
+    
+    if n <= 1:
+        return 1
+    return fib(n-1)+fib(n-2)
+
+
+print(fib(7))
+
+# Хакер Василий получил доступ к классному журналу и хочет заменить все свои минимальные оценки на максимальные. Напишите программу, которая заменяет оценки Василия, но наоборот: все максимальные – на минимальные.
+# Input: 5 -> 1 3 3 3 4
+#a = []
+# n = int(input())
+# for i in range(n):
+#     a.append(int(input()))
+# print(a)
+
+# x = max(a)
+# y = min(a)
+# for i in range(len(a)):
+#     if a[i] == x:
+#         a[i] = y
+
+# print(a)
+# Напишите функцию, которая принимает одно число и проверяет, является ли оно простым
+
+# Напоминание: Простое число - это число, которое имеет 2 делителя: 1  и n(само число)
+
+# Input: 5
+# def is_prime(n, delt =2):
+#     if n%delt ==0:
+#         return False
+#     if delt> n//2:
+#         return True
+    
+#     return is_prime(n, delt + 1)
+
+
+# print(is_prime(18))
+# Дано натуральное число N и последовательность из N элементов. Требуется вывести эту последовательность в обратном порядке.
+# Примечание. В программе запрещается объявлять массивы и использовать циклы (даже для ввода и вывода).
+
+# Input:    2 -> 3 4
+
+def rev(m, nums):
+    if m < 0:
+        return
+    else:
+        if m == len(nums):
+            m = m-1
+        print(nums[m], end = ' ')
+        rev(m-1, nums)
+
+
+n = 3
+numbers = input()
+rev(n, numbers)
