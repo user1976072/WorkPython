@@ -1,28 +1,225 @@
+# Решение ДЗ к 8 семинару
+# Дополнить телефонный справочник возможностью изменения и удаления данных. Пользователь также может ввести имя или фамилию, и 
+# Вы должны реализовать функционал для изменения и удаления данных
+import os
+
+NAME_FILE = "Телефонный справочник.txt"
+
+def main():
+    data = load_data()
+    
+    while True:
+        user_choice = display_menu()
+
+        match user_choice:
+            case "1":
+                data = input_data(data)
+            case "2":
+                search_data(data)
+            case "3":
+                update_or_delete_data(data)
+            case "4":
+                save_data(data)
+                return
+            case _:
+                print("Ошибка: Неверный выбор.")
+
+
+def load_data():
+    data = {}
+    if os.path.exists(NAME_FILE):
+        with open(NAME_FILE) as f:
+            for line in f.readlines():
+                if line.strip():
+                    parts = line.strip().split("\t")
+                    if len(parts) == 2:
+                        name, num = parts
+                        data[name.replace("\t", " ")] = num
+                    else:
+                        print(f"Ошибка в строке: {line.strip()}")
+    return data
+
+
+def display_menu():
+    while True:
+        print("1. Ввести данные")
+        print("2. Поиск")
+        print("3. Изменить/Удалить данные")
+        print("4. Выход")
+        user_choice = input("Введите: ")
+        if user_choice not in ["1", "2", "3", "4"]:
+            print("Ошибка: Неверный выбор.")
+        else:
+            return user_choice
+
+
+def input_data(data):
+    name = input("Введите ФИО: ")
+    if name and len(name.split()) == 3:
+        num = input("Введите номер телефона: ")
+
+        if num and num.isdigit():
+            data[name.replace("\t", " ")] = num
+            return data
+    print("Неверный ввод данных")
+    return data
+
+
+def search_data(data):
+    user_input = input("Введите данные для поиска: ")
+
+    print("1. Найти по ФИО")
+    print("2. Найти по номеру телефона")
+    print("3. Вернуться в меню")
+
+    user_choice = input("Введите: ")
+
+    if user_choice == "1":
+        search_by_name(data, user_input)
+    elif user_choice == "2":
+        search_by_phone_number(data, user_input)
+    elif user_choice == "3":
+        print("Выход")
+    else:
+        print("Ошибка: Неверный выбор.")
+
+
+def search_by_name(data, user_input):
+    found = False
+    for key, value in data.items():
+        if user_input in key:
+            print(f"{key} {value}")
+            found = True
+
+    if not found:
+        print("ФИО не найдено.")
+        
+
+def search_by_phone_number(data, user_input):
+    found = False
+    for key, value in data.items():
+        if user_input == value:
+            print(f"{key} {value}")
+            found = True
+
+    if not found:
+        print("Номер телефона не найден.")
+
+
+def update_or_delete_data(data):
+    while True:
+        print("1. Изменить данные")
+        print("2. Удалить данные")
+        print("3. Вернуться в меню")
+        user_choice = input("Введите: ")
+        if user_choice not in ["1", "2", "3"]:
+            print("Ошибка: Неверный выбор.")
+        else:
+            break
+
+    if user_choice == "1":
+        update_data(data)
+    elif user_choice == "2":
+        delete_data(data)
+    elif user_choice == "3":
+        print("Выход")
+
+
+def update_data(data):
+    user_input = input("Введите ФИО для изменения данных: ")
+    if user_input in data:
+        new_num = input("Введите новый номер телефона: ")
+        if new_num.isdigit():
+            data[user_input] = new_num
+            print("Данные обновлены.")
+        else:
+            print("Ошибка: Неверный формат номера.")
+    else:
+        print("Ошибка: Данные не найдены.")
+
+
+def delete_data(data):
+    user_input = input("Введите ФИО для удаления данных: ")
+    if user_input in data:
+        del data[user_input]
+        print("Данные удалены.")
+    else:
+        print("Ошибка: Данные не найдены.")
+
+
+def save_data(data):
+    with open(NAME_FILE, "w") as f:
+        for name in data:
+            print(f"{name}\t{data[name]}", file=f)
+
+
+if __name__ == "__main__":
+    main()
+
+
 # Решение ДЗ к 7 семинару по Python
 # Винни-Пух попросил Вас посмотреть, есть ли в его стихах ритм. Поскольку разобраться в его кричалках не настолько просто, насколько легко он их 
 # придумывает, Вам стоит написать программу. Винни-Пух считает, что ритм есть, если число слогов (т.е. число гласных букв) в каждой фразе 
 # стихотворения одинаковое. Фраза может состоять из одного слова, если во фразе несколько слов, то они разделяются дефисами. Фразы отделяются друг 
 # от друга пробелами. Стихотворение  Винни-Пух вбивает в программу с клавиатуры. В ответе напишите “Парам пам-пам”, если с ритмом все в порядке и 
 # “Пам парам”, если с ритмом все не в порядке
+# 2 решение
 
-def ritm(ctroka):
-    d = ctroka.split()  
 
-    s_counts = []  
-    for fraza in d:
-        words = fraza.split('-')  
-        slog = sum(len(word) for word in words)  
-        s_counts.append(slog)  
+# def sum_vowels(phrase):
 
-    if len(set(s_counts)) == 1:
-        return "Парам пам-пам"
-    else:
-        return "Пам парам"
+#     vowels_letters = 'аоэеиыуёюя'  
+#     k = 0  
+#     for letter in phrase:
+#         if letter in vowels_letters:
+#             k += 1
+#     return k  
 
-ctroka = input("Введите стихотворение Винни-Пуха: ")
 
-result = ritm(ctroka)
-print(result)
+# def pam_param(phrases):
+
+#     sum_0 = sum_vowels(phrases[0])  
+#     for phrase_i in phrases[1:]:
+#         sum_i = sum_vowels(phrase_i)  
+#         if sum_0 != sum_i:
+#             return 'Пам парам'
+#     return 'Парам пам-пам'
+
+
+# text = input("Введите текст песни Винни-Пуха:").split()
+# print(pam_param(text))
+
+# 1 решение
+
+# def ritm(ctroka):
+#     d = ctroka.split()  
+
+#     s_counts = []  
+#     for fraza in d:
+#         words = fraza.split('-')  
+#         slog = sum(len(word) for word in words)  
+#         s_counts.append(slog)  
+#     if len(set(s_counts)) == 1:
+#         return "Парам пам-пам"
+#     else:
+#         return "Пам парам"
+
+# ctroka = input("Введите стихотворение Винни-Пуха: ")
+
+# result = ritm(ctroka)
+# print(result)
+
+# Функция ritm(ctroka) принимает входную строку ctroka, представляющую собой стихотворение.
+# Строка d = ctroka.split() разделяет стихотворение на фразы разделенные пробелами.
+# Создается список s_counts, в котором будут храниться количество слогов (гласных букв) для каждой фразы стихотворения.
+# Затем начинается цикл for fraza in d, который перебирает каждую фразу из списка d.
+# Внутри цикла каждая фраза разделяется на слова с использованием words = fraza.split('-'), при этом дефисы используются как разделители слов.
+# Для каждой фразы подсчитывается количество слогов (slog), пройдя по каждому слову в фразе и суммируя длину слов, которая предполагается 
+# равной количеству слогов (предполагается, что слова в фразе разделены дефисами, и каждое слово имеет столько слогов, сколько в его символах).
+# Количество слогов для текущей фразы добавляется в список s_counts.
+# После окончания цикла проверяется все ли числа слогов в фразах одинаковы. Если это так (сравнивается количество уникальных элементов в списке 
+# s_counts), то выводит "Парам пам-пам", ритм в есть. В противном случае выводится "Пам парам", ритма  нет.
+# результат анализа ритма выводится на экран.
 
 # Напишите функцию print_operation_table(operation, num_rows=6, num_columns=6), которая принимает в качестве аргумента функцию, вычисляющую 
 # элемент по номеру строки и столбца. Аргументы num_rows и num_columns указывают число строк и столбцов таблицы, которые должны быть распечатаны. 
@@ -30,6 +227,10 @@ print(result)
 # два аргумента, как, например, у операции умножения.
 
 # def print_operation_table(operation, num_rows=6, num_columns=6):
+#     """ Распечатать таблицу значений операций 
+#     operation операция, применяемая к номеру строки и столбца 
+#     num_rows число строк, 
+#     num_columns число столбцов"""
 
 #     for i in range(1, num_rows + 1):
 #         d = []
@@ -41,13 +242,13 @@ print(result)
 
 # print_operation_table(lambda x, y: x * y)
 
-# Функция использует два вложенных цикла for для создания таблицы.
-# Внешний цикл перебирает строки от 1 до num_rows.
-# Внутренний цикл перебирает столбцы от 1 до num_columns.
-# В каждой операции внутреннего цикла функция вызывает переданную операцию (operation) с текущими значениями строки (i) и столбца (j) в качестве аргументов.
+# Функция использует два цикла для создания таблицы.
+# цикл перебирает строки от 1 до num_rows.
+# цикл перебирает столбцы от 1 до num_columns.
+# В каждой операции цикла функция вызывает операцию (operation) с значениями строки (i) и столбца (j) в качестве аргументов.
 # Результат операции добавляется в список d.
-# После завершения внутреннего цикла, список d содержит результаты для одной строки таблицы.
-# С помощью print(*d) результаты этой строки выводятся на экран через пробел, что создает эффект таблицы.
+# После завершения цикла, список d содержит результаты для одной строки таблицы.
+# print(*d) создает таблицу.
 
 #Решение ДЗ к 6 семинару по Python
 #Заполните массив элементами арифметической прогрессии. Её первый элемент, разность и количество элементов нужно ввести с клавиатуры. Формула для получения n-го члена прогрессии: an = a1 + (n-1) * d.
